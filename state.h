@@ -7,12 +7,13 @@ private:
 	int grid[BOARDSIZE][BOARDSIZE] = {};
 	vector<int> numbers{ 0,0,0,1,2,3,4,5,6 };
 	vector<vector<int>> legalActions;
+	priority_queue<Action> actions;
 
 public:
  
 	State() {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < BOARDSIZE; i++) {
+			for (int j = 0; j < BOARDSIZE; j++) {
 				int temp = rand() % numbers.size();
 				grid[i][j] = numbers[temp];
 				numbers.erase(numbers.begin() + temp);
@@ -54,6 +55,7 @@ public:
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
 	void findLegalActions();
+	void executeMove();
 
 };
 
@@ -218,5 +220,9 @@ void State::findLegalActions() {
     }
 }
 
+void State::executeMove() {
 
+	int temp = rand() % legalActions.size();
+	moveBlock(legalActions[temp][0],legalActions[temp][1]);
 
+}

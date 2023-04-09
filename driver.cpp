@@ -9,14 +9,15 @@
 
 using namespace std;
 
+#include "action.h"
 #include "state.h"
+#include "solver.h"
 
 int main() {
 
 	srand(time(NULL));
 
 	State state;
-	list<State> lists;
 
 	int from, to;
 	state.printBoard();
@@ -27,6 +28,8 @@ int main() {
 	// state.moveBlock(from, to);
 	// state.printBoard();
 	state.findLegalActions();
+	state.executeMove();
+	state.printBoard();
 
 	return 0;
 }
