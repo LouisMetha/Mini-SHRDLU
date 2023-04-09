@@ -20,13 +20,13 @@ int main() {
 
 	int from, to;
 	state.printBoard();
-	cout << "from which col? ";
-	cin >> from;
-	cout << "to which col?";
-	cin >> to;
-	state.checkMove(from, to);
-	state.moveBlock();
-	state.printBoard();
+	// cout << "from which col? ";
+	// cin >> from;
+	// cout << "to which col?";
+	// cin >> to;
+	// state.moveBlock(from, to);
+	// state.printBoard();
+	state.findLegalActions();
 
 	return 0;
 }

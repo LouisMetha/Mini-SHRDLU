@@ -7,7 +7,6 @@ private:
 	int grid[BOARDSIZE][BOARDSIZE] = {};
 	vector<int> numbers{ 0,0,0,1,2,3,4,5,6 };
 	vector<vector<int>> legalActions;
-	int tempGrid[BOARDSIZE][BOARDSIZE] = {};
 
 public:
  
@@ -53,6 +52,7 @@ public:
 	int removeBlockFrom(int column);
 	bool insertBlockTo(int column, int value);
 	bool moveBlock(int source, int destination);
+	bool checkMove(int source, int destination);
 	void findLegalActions();
 
 };
@@ -111,27 +111,27 @@ int State::removeBlockFrom(int column) {
 	int topBlock;
 
 	for (int i = 0; i < BOARDSIZE; i++) {
-		if (tempGrid[i][column] != 0){
-			tempStack.push(tempGrid[i][column]);
+		if (grid[i][column] != 0){
+			tempStack.push(grid[i][column]);
 		}
 	}
 
 	if (tempStack.size() == 0) {
-		cout << "removeBlockFrom: Empty stack.\n";
+		cout << "removeBlockFrom: Empty stack. At Column: " << column << endl;
 		return -1;
 	}
 
 	for (int k = 0; k < BOARDSIZE; k++) {
 		if (tempStack.empty() == true) {
-			tempGrid[BOARDSIZE - k - 1][column] = 0;
+			grid[BOARDSIZE - k - 1][column] = 0;
 
 		} else if (tempStack.size() == 1) {			// replace last element of stack with 0 then pop it
-			tempGrid[BOARDSIZE - k - 1][column] = 0;
+			grid[BOARDSIZE - k - 1][column] = 0;
 			topBlock = tempStack.top();
 			tempStack.pop();
 			
 		} else {
-			tempGrid[BOARDSIZE - k - 1][column] = tempStack.top();
+			grid[BOARDSIZE - k - 1][column] = tempStack.top();
 			tempStack.pop();
 		}
 	}
@@ -147,22 +147,22 @@ bool State::insertBlockTo(int column, int value) {
 	tempStack.push(value);	
 
 	for (int i = 0; i < BOARDSIZE; i++) {
-		if (tempGrid[i][column] != 0) {
-			tempStack.push(tempGrid[i][column]);
+		if (grid[i][column] != 0) {
+			tempStack.push(grid[i][column]);
 		}
 	}
 
 	if (tempStack.size() > BOARDSIZE) { // if size of 4 = cannot add a block on top
-		cout << "\nFALSE\n";
+
 		return false;
 	}
 
 	for (int k = 0; k < BOARDSIZE; k++) {
 		if (tempStack.empty() == true) {
-			tempGrid[BOARDSIZE - k - 1][column] = 0;
+			grid[BOARDSIZE - k - 1][column] = 0;
 
 		} else {
-			tempGrid[BOARDSIZE - k - 1][column] = tempStack.top();
+			grid[BOARDSIZE - k - 1][column] = tempStack.top();
 			tempStack.pop();
 		}
 	}
@@ -172,9 +172,12 @@ bool State::insertBlockTo(int column, int value) {
 
 bool State::moveBlock(int source, int destination) {
 
-	tempGrid = grid;
+	if (source == destination)
+		return false;
 
-	if (!insertBlockTo(destination, removeBlockFrom)) {
+	int block = removeBlockFrom(source);
+
+	if (!insertBlockTo(destination, block)) {
 		insertBlockTo(source,block);
 		return false;
 	}
@@ -182,27 +185,37 @@ bool State::moveBlock(int source, int destination) {
 	return true;
 }
 
-void State::findLegalActions() {
+bool State::checkMove(int source, int destination) {
 
-	vector<int> legalActions;
-	stack<int> tempStack;
+	if (source == destination)
+		return false;
+
+	int block = removeBlockFrom(source);
+
+	if (!insertBlockTo(destination, block)) {
+		insertBlockTo(source,block);
+		return false;
+	}
+	
+	return insertBlockTo(source,removeBlockFrom(destination));
+}
+
+void State::findLegalActions() {
 
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
-
-			if (grid[j][i] != 0)
-				tempStack.push(grid[j][i]);
+			if (checkMove(i,j))
+				legalActions.push_back({i,j});
 		}
-
-	
-		
-
-
-
 	}
-
-
-
+	
+	for (int i = 0; i < legalActions.size(); i++) {
+        for (int j = 0; j < legalActions[i].size(); j++) {
+            cout << legalActions[i][j];
+			if (j == 0) cout << ",";
+        }
+        cout << endl;
+    }
 }
 
 
