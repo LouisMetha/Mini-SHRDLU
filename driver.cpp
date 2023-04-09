@@ -11,7 +11,7 @@ using namespace std;
 
 #include "action.h"
 #include "state.h"
-#include "solver.h"
+//#include "solver.h"
 
 int main() {
 
