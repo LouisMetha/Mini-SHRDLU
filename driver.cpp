@@ -11,18 +11,20 @@ using namespace std;
 
 #include "action.h"
 #include "state.h"
+#include "solver.h"
 
 int main() {
 
 	srand(time(NULL));
 
-	for (int i = 0; i < 10; i++) {
-		State state;
-		state.printBoard();
-		state.findLegalActions();
-		state.executeMove();
-		state.printBoard();
-	}
+	State* initial_state = new State();
+	cout << "--- Initial State ---\n";
+	initial_state->printBoard();
+
+	Solver solver(initial_state);
+	//solver.solve();
+
+	delete initial_state;
 
 	return 0;
 }

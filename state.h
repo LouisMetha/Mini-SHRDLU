@@ -6,7 +6,6 @@ class State {
 private:
 	int grid[BOARDSIZE][BOARDSIZE] = {};
 	vector<int> numbers{ 0,0,0,1,2,3,4,5,6 };
-	priority_queue<Action> actions;
 
 public:
  
@@ -43,10 +42,8 @@ public:
 	bool insertBlockTo(int column, int value);
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
-	void findLegalActions();
-	void executeMove();
-	int getHeuristicValue(int source, int destination);
-	void getGoal();
+	void executeMove(Action a);
+	int getBlock_inGoalPos(int* goal);
 
 };
 
@@ -103,7 +100,6 @@ int State::removeBlockFrom(int column) {
 	}
 
 	if (tempStack.size() == 0) {
-		cout << "removeBlockFrom: Empty stack. At Column: " << column << endl;
 		return 0;
 	}
 
@@ -183,76 +179,15 @@ bool State::checkMove(int source, int destination) {
 	return insertBlockTo(source,removeBlockFrom(destination));
 }
 
-void State::findLegalActions() {
+void State::executeMove(Action a) {
 
-	Action action;
-
-	for (int i = 0; i < BOARDSIZE; i++) {
-		for (int j = 0; j < BOARDSIZE; j++) {
-			if (checkMove(i,j)) {
-				action.source = i;
-				action.destination = j;
-				action.heuristic = getHeuristicValue(i,j);
-				actions.push(action);
-			}
-		}
-	}
-
-	// PRINT LEGAL ACTIONS
-	while(!actions.empty()) {
-		Action a = actions.top();
-		actions.pop();
-		cout << "Source: " << a.source << ", Destination: " << a.destination << ", Heuristic: " << a.heuristic << endl;
-	}
-}
-
-void State::executeMove() {
-
-	Action a = actions.top();
-	actions.pop();
 	moveBlock(a.source,a.destination);
-}
-
-int State::getHeuristicValue(int source, int destination) {
-
-	// int count = 0;
-    // for (int i = 0; i < 3; i++) {
-    //     for (int j = 0; j < 3; j++) {
-    //         if (state[i][j] != goal[i][j]) {
-    //             count++;
-    //         }
-    //     }
-    // }
-    // return count;
-
-	return 1;
 
 }
 
-void State::getGoal() {
+int State::getBlock_inGoalPos(int* goal) {
 
-	int goal[3];
-	int block,row,col;
-
-	cout << "Enter the goal (Block, row, col): ";
-	cout << "Block 1-6 : ";
-	cin >> block;
-	goal[0] = block;
-
-	cout << "Row 0-2 : ";
-	cin >> row;
-	goal[1] = row;
-
-	cout << "Col 0-2 : ";
-	cin >> col;
-	goal[2] = col;
-
-	cout << "Goal: ";
-
-	for (int i = 0; i < 3; i++) {	
-		cout << goal[i];
-		if (i != 2) cout << ", "; else cout << endl;
-	}
-
+	int block = grid[BOARDSIZE - goal[1] - 1][goal[2]];
+	return block;
 }
 
