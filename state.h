@@ -46,6 +46,7 @@ public:
 	void findLegalActions();
 	void executeMove();
 	int getHeuristicValue(int source, int destination);
+	void getGoal();
 
 };
 
@@ -54,7 +55,12 @@ void State::printBoard() {
 	cout << " --- --- --- \n";
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
-			cout << "| " << grid[i][j] << " ";
+			if (grid[i][j] == 0) {
+				cout << "| " << " " << " ";
+
+			} else {
+				cout << "| " << grid[i][j] << " ";
+			}
 		}
 		cout << "|\n";
 	}
@@ -98,7 +104,7 @@ int State::removeBlockFrom(int column) {
 
 	if (tempStack.size() == 0) {
 		cout << "removeBlockFrom: Empty stack. At Column: " << column << endl;
-		return -1;
+		return 0;
 	}
 
 	for (int k = 0; k < BOARDSIZE; k++) {
@@ -169,7 +175,7 @@ bool State::checkMove(int source, int destination) {
 
 	int block = removeBlockFrom(source);
 
-	if (!insertBlockTo(destination, block)) {
+	if (!insertBlockTo(destination, block) || block <= 0) {
 		insertBlockTo(source,block);
 		return false;
 	}
@@ -198,17 +204,55 @@ void State::findLegalActions() {
 		actions.pop();
 		cout << "Source: " << a.source << ", Destination: " << a.destination << ", Heuristic: " << a.heuristic << endl;
 	}
-	
 }
 
 void State::executeMove() {
 
-	int temp = rand() % legalActions.size();
-	moveBlock(legalActions[temp][0],legalActions[temp][1]);
+	Action a = actions.top();
+	actions.pop();
+	moveBlock(a.source,a.destination);
 }
 
 int State::getHeuristicValue(int source, int destination) {
 
+	// int count = 0;
+    // for (int i = 0; i < 3; i++) {
+    //     for (int j = 0; j < 3; j++) {
+    //         if (state[i][j] != goal[i][j]) {
+    //             count++;
+    //         }
+    //     }
+    // }
+    // return count;
 
 	return 1;
+
 }
+
+void State::getGoal() {
+
+	int goal[3];
+	int block,row,col;
+
+	cout << "Enter the goal (Block, row, col): ";
+	cout << "Block 1-6 : ";
+	cin >> block;
+	goal[0] = block;
+
+	cout << "Row 0-2 : ";
+	cin >> row;
+	goal[1] = row;
+
+	cout << "Col 0-2 : ";
+	cin >> col;
+	goal[2] = col;
+
+	cout << "Goal: ";
+
+	for (int i = 0; i < 3; i++) {	
+		cout << goal[i];
+		if (i != 2) cout << ", "; else cout << endl;
+	}
+
+}
+

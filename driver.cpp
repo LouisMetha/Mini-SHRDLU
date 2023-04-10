@@ -11,25 +11,18 @@ using namespace std;
 
 #include "action.h"
 #include "state.h"
-//#include "solver.h"
 
 int main() {
 
 	srand(time(NULL));
 
-	State state;
-
-	int from, to;
-	state.printBoard();
-	// cout << "from which col? ";
-	// cin >> from;
-	// cout << "to which col?";
-	// cin >> to;
-	// state.moveBlock(from, to);
-	// state.printBoard();
-	state.findLegalActions();
-	state.executeMove();
-	state.printBoard();
+	for (int i = 0; i < 10; i++) {
+		State state;
+		state.printBoard();
+		state.findLegalActions();
+		state.executeMove();
+		state.printBoard();
+	}
 
 	return 0;
 }
