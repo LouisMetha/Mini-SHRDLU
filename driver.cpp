@@ -18,13 +18,10 @@ int main() {
 	srand(time(NULL));
 
 	State* initial_state = new State();
-	cout << "--- Initial State ---\n";
-	initial_state->printBoard();
-
 	Solver solver(initial_state);
-	//solver.solve();
+	solver.solve();
 
 	delete initial_state;
-
+	
 	return 0;
 }
