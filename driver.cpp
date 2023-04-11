@@ -12,6 +12,7 @@ using namespace std;
 #include "action.h"
 #include "state.h"
 #include "solver.h"
+//#include "heuristicSolver.h"
 
 int main() {
 
@@ -20,6 +21,8 @@ int main() {
 	State* initial_state = new State();
 	Solver solver(initial_state);
 	solver.solve();
+	// HeuristicSolver h(initial_state);
+	// h.solve();
 
 	delete initial_state;
 	

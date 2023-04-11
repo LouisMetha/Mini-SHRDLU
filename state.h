@@ -6,6 +6,7 @@ class State {
 private:
 	int grid[BOARDSIZE][BOARDSIZE] = {};
 	vector<int> numbers{ 0,0,0,1,2,3,4,5,6 };
+	int passBlock;
 
 public:
  
@@ -36,13 +37,17 @@ public:
 		return false;
 	}
 
+	int getBlock() {
+		return passBlock;
+	}
+
 	void printBoard();
 	void pushDown();
 	int removeBlockFrom(int column);
 	bool insertBlockTo(int column, int value);
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
-	int getBlock(int row, int col);
+	int getGoalBlock(int row, int col);
 	int getHeuristicValue();
 	priority_queue<Action> findLegalActions();
 
@@ -155,7 +160,8 @@ bool State::moveBlock(int source, int destination) {
 		return false;
 
 	int block = removeBlockFrom(source);
-
+	passBlock = block;
+	
 	if (!insertBlockTo(destination, block)) {
 		insertBlockTo(source,block);
 		return false;
@@ -179,7 +185,7 @@ bool State::checkMove(int source, int destination) {
 	return insertBlockTo(source,removeBlockFrom(destination));
 }
 
-int State::getBlock(int row, int col) {
+int State::getGoalBlock(int row, int col) {
 
 	int block = grid[BOARDSIZE - row - 1][col];
 	return block;
@@ -189,7 +195,6 @@ priority_queue<Action> State::findLegalActions() {
 
 	priority_queue<Action> actions;
 	Action action;
-
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (checkMove( i,j)) {
@@ -204,20 +209,6 @@ priority_queue<Action> State::findLegalActions() {
 	return actions;
 }
 
-int State::getHeuristicValue() {
 
-	// int count = 0;
-    // for (int i = 0; i < 3; i++) {
-    //     for (int j = 0; j < 3; j++) {
-    //         if (state[i][j] != goal[i][j]) {
-    //             count++;
-    //         }
-    //     }
-    // }
-    // return count;
-
-	return 1;
-
-}
 
 

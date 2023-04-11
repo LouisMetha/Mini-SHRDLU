@@ -1,28 +1,22 @@
 #pragma once
 
-#include "state.h"
-#include "action.h"
-
 class Solver {
 
-private:
+protected:
     State* current_state;
     int goal[3];
 
 public:
-
     Solver(State* initial_state) : current_state(initial_state) {
         cout << "--- Initial State ---\n\n";
         current_state->printBoard();
         getGoal();
     }
-
     ~Solver() {}
     bool checkGoal();
-    bool searchVisitedStates(list<State*>& states,State* target);
-    void solve();
+    bool searchVisitedStates(list<State*>& states,State* target) const;
+    virtual void solve();
     int* getGoal();
-
 };
 
 bool Solver::checkGoal() {
@@ -30,11 +24,11 @@ bool Solver::checkGoal() {
     int row = goal[1];
     int col = goal[2];
 
-    return current_state->getBlock(row,col) == block;
+    return current_state->getGoalBlock(row,col) == block;
     
 }
 
-bool Solver::searchVisitedStates(list<State*>& states, State* target) {
+bool Solver::searchVisitedStates(list<State*>& states, State* target) const {
 
     for (State* state : states) {
         if (*state == *target) {
@@ -73,7 +67,6 @@ int* Solver::getGoal() {
 	}
 
 	return goal;
-
 }
 
 void Solver::solve()  {
@@ -81,25 +74,32 @@ void Solver::solve()  {
     list<State*> visited;
     visited.push_back(current_state);
     int steps = 0;
+    int num_visits = 0;
+
 
     while(!checkGoal() && steps < 100) {
         
         priority_queue<Action> actions = current_state->findLegalActions();
-        
+
         while(!actions.empty()) {
 
             State* next_state = new State(*current_state);
             Action a = actions.top();
             next_state->moveBlock(a.source,a.destination);
-
+    
             if (searchVisitedStates(visited,next_state)) {
                 actions.pop();
-                if (actions.empty())
-                    current_state->moveBlock(a.source,a.destination); // prevent inf-loop - brute force move
+                num_visits++;
+                // prevent inf-loop - brute force move
+                if (num_visits == 50) { 
+                    current_state->moveBlock(a.source,a.destination); 
+                    cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
+                    current_state->printBoard();
+                    num_visits = 0;
+                }
                 continue;
             } else {
-                int block = current_state->removeBlockFrom(a.source);
-                cout << "Step " << ++steps << " : Move " << block << " from " << a.source << " to " << a.destination << endl; 
+                cout << "Step " << ++steps << " : Move " << next_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
                 visited.push_back(next_state);
                 current_state = next_state;
                 current_state->printBoard();
