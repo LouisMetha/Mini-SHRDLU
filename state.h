@@ -48,8 +48,8 @@ public:
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
 	int getGoalBlock(int row, int col);
-	int getHeuristicValue(int* goal);
-	priority_queue<Action> findLegalActions();
+	int getHeuristicValue(int source, int destination, int* goal);
+	priority_queue<Action> blindLegalActions();
 	priority_queue<Action> heuristicActions(int* goal);
 
 };
@@ -192,7 +192,7 @@ int State::getGoalBlock(int row, int col) {
 	return block;
 }
 
-priority_queue<Action> State::findLegalActions() {
+priority_queue<Action> State::blindLegalActions() {
 
 	priority_queue<Action> actions;
 	Action action;
@@ -219,7 +219,7 @@ priority_queue<Action> State::heuristicActions(int* goal) {
 			if (checkMove( i,j)) {
 				action.source = i;
 				action.destination = j;
-				action.heuristic = getHeuristicValue(goal);
+				action.heuristic = getHeuristicValue(i,j,goal);
 				actions.push(action);
 			}
 		}
@@ -228,8 +228,63 @@ priority_queue<Action> State::heuristicActions(int* goal) {
 	return actions;
 }
 
-int State::getHeuristicValue(int* goal) {
+int State::getHeuristicValue(int source, int destination, int* goal) {
 
-	return 0;
+	int goalblock = goal[0];
+    int row = goal[1];
+    int col = goal[2];
+	int value = 0;
+	int blocks = 0;
+	int curCol, curRow;
+
+	State newState(*this); // does not use the same memory location as the original State
+	newState.moveBlock(source, destination);
+
+	if (newState.grid[BOARDSIZE - row - 1][col] == goalblock) {
+		return value += 100;
+	}
+
+	//find currenet position of goal block
+	for (int i = 0; i < BOARDSIZE; i++) {
+		for (int j = 0; j < BOARDSIZE; j++) {
+			if (newState.grid[BOARDSIZE - i - 1][j] == goalblock) {
+				curRow = i;
+				curCol = j;
+				break;
+			}
+		}
+	}
+
+	//get value if on top of blocks
+	for (int k = 0; k < BOARDSIZE; k++) {
+		if (newState.grid[BOARDSIZE - k - 1][curCol] != 0) {
+			blocks++;
+		}
+	}
+
+	if (curRow == (blocks - 1)) {
+		value += 50;
+	} else {
+		value += 15 - (blocks - curRow - 1)*5;
+	}
+	
+	//get value depends on blocks to move at goal position
+	blocks = 0;
+
+	for (int n = 0; n < BOARDSIZE; n++) {
+		if (newState.grid[BOARDSIZE - n - 1][col] != 0) {
+			blocks++;
+		}
+	}
+
+	if (blocks == row) {
+		value += 35;
+	} else if (blocks == row - 1) {
+		value += 25;
+	} else if (blocks > row){
+		value += 15 - (blocks - row)*5;
+	}
+
+	return value;
 
 }

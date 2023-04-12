@@ -75,9 +75,10 @@ void Solver::solve()  {
     int steps = 0;
     int num_visits = 0;
 
+
     while(!checkGoal() && steps < 100) {
         
-        priority_queue<Action> actions = current_state->findLegalActions();
+        priority_queue<Action> actions = current_state->blindLegalActions();
 
         while(!actions.empty()) {
 
@@ -88,7 +89,7 @@ void Solver::solve()  {
             if (searchVisitedStates(visited,next_state)) {
                 actions.pop();
                 num_visits++;
-
+                
                 // prevent inf-loop - brute force move
                 if (num_visits == 50) { 
                     current_state->moveBlock(a.source,a.destination); 
