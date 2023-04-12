@@ -48,8 +48,9 @@ public:
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
 	int getGoalBlock(int row, int col);
-	int getHeuristicValue();
+	int getHeuristicValue(int* goal);
 	priority_queue<Action> findLegalActions();
+	priority_queue<Action> heuristicActions(int* goal);
 
 };
 
@@ -209,6 +210,26 @@ priority_queue<Action> State::findLegalActions() {
 	return actions;
 }
 
+priority_queue<Action> State::heuristicActions(int* goal) {
 
+	priority_queue<Action> actions;
+	Action action;
+	for (int i = 0; i < BOARDSIZE; i++) {
+		for (int j = 0; j < BOARDSIZE; j++) {
+			if (checkMove( i,j)) {
+				action.source = i;
+				action.destination = j;
+				action.heuristic = getHeuristicValue(goal);
+				actions.push(action);
+			}
+		}
+	}
 
+	return actions;
+}
 
+int State::getHeuristicValue(int* goal) {
+
+	return 0;
+
+}

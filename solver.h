@@ -25,7 +25,6 @@ bool Solver::checkGoal() {
     int col = goal[2];
 
     return current_state->getGoalBlock(row,col) == block;
-    
 }
 
 bool Solver::searchVisitedStates(list<State*>& states, State* target) const {
@@ -76,7 +75,6 @@ void Solver::solve()  {
     int steps = 0;
     int num_visits = 0;
 
-
     while(!checkGoal() && steps < 100) {
         
         priority_queue<Action> actions = current_state->findLegalActions();
@@ -90,6 +88,7 @@ void Solver::solve()  {
             if (searchVisitedStates(visited,next_state)) {
                 actions.pop();
                 num_visits++;
+
                 // prevent inf-loop - brute force move
                 if (num_visits == 50) { 
                     current_state->moveBlock(a.source,a.destination); 
@@ -113,5 +112,4 @@ void Solver::solve()  {
     } else {
         cout << "Goal state is NOT found within " << steps << " steps." << endl;
     }
-
 }
