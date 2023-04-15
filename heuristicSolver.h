@@ -10,23 +10,18 @@ public:
 void HeuristicSolver::solve()  {
 
     getGoal();
-    list<State*> visited;
-    visited.push_back(current_state);
-    int steps = 0;
     
-
     while (!goals.empty()) {
 
+        int steps = 0;
+        list<State*> visited;
+        visited.push_back(current_state);
+
         vector<int> goal = goals.front();
-        cout << "\nGOAL:";
-        for (int i = 0; i < goal.size(); i++) {
-            cout << goal[i];
-            if (i != goal.size() -1) cout << ", "; else cout << ") \n";
-        }
 
         while(!checkGoal(goal) && steps < 5) {
         
-        priority_queue<Action> actions = current_state->heuristicActions(goal);
+            priority_queue<Action> actions = current_state->heuristicActions(goal);
 
             while(!actions.empty()) {
 
@@ -49,16 +44,17 @@ void HeuristicSolver::solve()  {
         }
 
         if (checkGoal(goal)) {
-            cout << "Goal state is found within " << steps << " steps." << endl;
+            cout << "\nGOAL: (";
+            for (int i = 0; i < goal.size(); i++) {
+                cout << goal[i];
+                if (i != goal.size() -1) cout << ", "; else cout << ") ";
+            }
+            cout << "is found within " << steps << " steps." << endl;
             break;
         } else {
             cout << "Goal state is NOT found within " << steps << " steps." << endl;
         }
 
         goals.pop();
-        steps = 0;
     }
-
-
-
 }

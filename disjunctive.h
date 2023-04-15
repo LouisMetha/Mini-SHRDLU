@@ -35,7 +35,7 @@ void Disjunctive::getGoal() {
 
         goals.push(goal);
 
-        cout << "Goal: (";
+        cout << "\nGoal: (";
         for (int i = 0; i < BOARDSIZE; i++) {	
             cout << goal[i];
             if (i != 2) cout << ", "; else cout << ") ";
