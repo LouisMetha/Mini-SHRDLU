@@ -4,22 +4,24 @@ class Solver {
 
 protected:
     State* current_state;
-    int goal[3];
+    queue<vector<int>> goals;
+    int num_blocks = 6;
 
 public:
     Solver(State* initial_state) : current_state(initial_state) {
         cout << "--- Initial State ---\n\n";
         current_state->printBoard();
-        getGoal();
+
     }
     ~Solver() {}
-    bool checkGoal();
+    bool checkGoal(vector<int> goal);
     bool searchVisitedStates(list<State*>& states,State* target) const;
     virtual void solve();
-    int* getGoal();
+    virtual void getGoal();
 };
 
-bool Solver::checkGoal() {
+bool Solver::checkGoal(vector<int> goal) {
+
     int block = goal[0];
     int row = goal[1];
     int col = goal[2];
@@ -37,46 +39,54 @@ bool Solver::searchVisitedStates(list<State*>& states, State* target) const {
     return false;
 }
 
-int* Solver::getGoal() {
+void Solver::getGoal() {
 
+    vector<int> goal;
 	int block = 0;
 	int row,col;
+    char input = 'y';
+        
+    cout << "Enter the goal (Block, row, col): ";
 
-	cout << "Enter the goal (Block, row, col): ";
+    while (block <= 0 || block > num_blocks) {
+        cout << "\nBlock 1-6 : ";
+        cin >> block;
+    }
+    goal.push_back(block);
 
-	while (block <= 0) {
-		cout << "\nBlock 1-6 : ";
-		cin >> block;
-		goal[0] = block;
-	}
+    cout << "Row 0-2 : ";
+    cin >> row;
+    goal.push_back(row);
 
-	cout << "Row 0-2 : ";
-	cin >> row;
-	goal[1] = row;
+    cout << "Col 0-2 : ";
+    cin >> col;
+    goal.push_back(col);
 
-	cout << "Col 0-2 : ";
-	cin >> col;
-	goal[2] = col;
+    goals.push(goal);
 
-	cout << "Goal: (";
-
-	for (int i = 0; i < 3; i++) {	
-		cout << goal[i];
-		if (i != 2) cout << ", "; else cout << ")\n" << endl;
-	}
-
-	return goal;
+    cout << "Goal: (";
+    for (int i = 0; i < BOARDSIZE; i++) {	
+        cout << goal[i];
+        if (i != BOARDSIZE -1) cout << ", "; else cout << ") ";
+    }
 }
 
 void Solver::solve()  {
 
+    getGoal();
     list<State*> visited;
     visited.push_back(current_state);
     int steps = 0;
     int num_visits = 0;
+   
+    vector<int> goal = goals.front();
 
+    for (int i = 0; i < goal.size(); i++) {
+        cout << "GOAL:";
+        cout << goal[i] << ", ";
+    }
 
-    while(!checkGoal() && steps < 100) {
+    while(!checkGoal(goal) && steps < 100) {
         
         priority_queue<Action> actions = current_state->blindLegalActions();
 
@@ -108,7 +118,7 @@ void Solver::solve()  {
         }
     }
 
-    if (checkGoal()) {
+    if (checkGoal(goal)) {
         cout << "Goal state is found within " << steps << " steps." << endl;
     } else {
         cout << "Goal state is NOT found within " << steps << " steps." << endl;

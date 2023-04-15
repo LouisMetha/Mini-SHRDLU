@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <stack>
 #include <queue>
+#include <string.h>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ using namespace std;
 #include "state.h"
 #include "solver.h"
 #include "heuristicSolver.h"
+#include "disjunctive.h"
 
 int main() {
 
@@ -22,10 +24,15 @@ int main() {
 	// Solver solver(initial_state);
 	// solver.solve();
 	
-	HeuristicSolver h(initial_state);
-	h.solve();
+	// HeuristicSolver h(initial_state);
+	// h.solve();
+
+	Disjunctive d(initial_state);
+	d.solve();
+
 
 	delete initial_state;
 	
+
 	return 0;
 }
