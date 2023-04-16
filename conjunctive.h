@@ -54,9 +54,8 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
                 
                 // prevent inf-loop - brute force move
                 if (num_visits == 50) { 
-                    cout << "TRIGGGGGGGGGGGGGGERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n";
-                    actions = current_state->blindLegalActions();
-                    a = actions.top();
+                    priority_queue<Action> temp_actions = current_state->blindLegalActions();
+                    a = temp_actions.top();
                     current_state->moveBlock(a.source,a.destination); 
                     cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
                     current_state->printBoard();

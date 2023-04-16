@@ -225,6 +225,7 @@ priority_queue<Action> State::heuristicActions(Goal goal) {
 		}
 	}
 
+
 	return actions;
 }
 
