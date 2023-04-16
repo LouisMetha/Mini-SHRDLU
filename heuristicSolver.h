@@ -19,7 +19,7 @@ void HeuristicSolver::solve()  {
 
         vector<int> goal = goals.front();
 
-        while(!checkGoal(goal) && steps < 5) {
+        while(!checkGoal(goal) && steps < 100) {
         
             priority_queue<Action> actions = current_state->heuristicActions(goal);
 

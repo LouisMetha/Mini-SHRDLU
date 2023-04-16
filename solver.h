@@ -67,7 +67,7 @@ void Solver::getGoal() {
     cout << "Goal: (";
     for (int i = 0; i < BOARDSIZE; i++) {	
         cout << goal[i];
-        if (i != BOARDSIZE -1) cout << ", "; else cout << ") ";
+        if (i != BOARDSIZE -1) cout << ", "; else cout << ") \n\n";
     }
 }
 
@@ -80,11 +80,6 @@ void Solver::solve()  {
     int num_visits = 0;
    
     vector<int> goal = goals.front();
-
-    for (int i = 0; i < goal.size(); i++) {
-        cout << "GOAL:";
-        cout << goal[i] << ", ";
-    }
 
     while(!checkGoal(goal) && steps < 100) {
         

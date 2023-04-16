@@ -15,6 +15,7 @@ using namespace std;
 #include "solver.h"
 #include "heuristicSolver.h"
 #include "disjunctive.h"
+#include "conjunctive.h"
 
 int main() {
 
@@ -27,12 +28,13 @@ int main() {
 	// HeuristicSolver h(initial_state);
 	// h.solve();
 
-	Disjunctive d(initial_state);
-	d.solve();
+	// Disjunctive d(initial_state);
+	// d.solve();
 
+	Conjunctive c(initial_state);
+	c.solve();
 
 	delete initial_state;
-	
 
 	return 0;
 }
