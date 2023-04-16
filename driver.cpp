@@ -10,6 +10,7 @@
 
 using namespace std;
 
+#include "goal.h"
 #include "action.h"
 #include "state.h"
 #include "solver.h"
@@ -22,7 +23,6 @@ int main() {
 	srand(time(NULL));
 
 	State* initial_state = new State();
-	
 	// Solver solver(initial_state);
 	// solver.solve();
 	
@@ -32,8 +32,8 @@ int main() {
 	// Disjunctive d(initial_state);
 	// d.solve();
 
-	// Conjunctive c(initial_state);
-	// c.solve();
+	Conjunctive c(initial_state);
+	c.solve();
 
 	delete initial_state;
 

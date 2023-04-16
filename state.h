@@ -48,9 +48,9 @@ public:
 	bool moveBlock(int source, int destination);
 	bool checkMove(int source, int destination);
 	int getGoalBlock(int row, int col);
-	int getHeuristicValue(int source, int destination, vector<int> goal);
+	int getHeuristicValue(int source, int destination, Goal goal);
 	priority_queue<Action> blindLegalActions();
-	priority_queue<Action> heuristicActions(vector<int> goal);
+	priority_queue<Action> heuristicActions(Goal goal);
 
 };
 
@@ -210,7 +210,7 @@ priority_queue<Action> State::blindLegalActions() {
 	return actions;
 }
 
-priority_queue<Action> State::heuristicActions(vector<int> goal) {
+priority_queue<Action> State::heuristicActions(Goal goal) {
 
 	priority_queue<Action> actions;
 	Action action;
@@ -228,11 +228,11 @@ priority_queue<Action> State::heuristicActions(vector<int> goal) {
 	return actions;
 }
 
-int State::getHeuristicValue(int source, int destination, vector<int> goal) {
+int State::getHeuristicValue(int source, int destination, Goal goal) {
 
-	int goalblock = goal[0];
-    int row = goal[1];
-    int col = goal[2];
+	int goalblock = goal.block;
+    int row = goal.row;
+    int col = goal.col;
 	int value = 0;
 	int blocks = 0;
 	int curCol, curRow;

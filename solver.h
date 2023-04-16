@@ -4,7 +4,7 @@ class Solver {
 
 protected:
     State* current_state;
-    queue<vector<int>> goals;
+    priority_queue<Goal> goals;
     int num_blocks = 6;
 
 public:
@@ -14,17 +14,17 @@ public:
 
     }
     ~Solver() {}
-    bool checkGoal(vector<int> goal);
+    bool checkGoal(Goal goal);
     bool searchVisitedStates(list<State*>& states,State* target) const;
     virtual void solve();
     virtual void getGoal();
 };
 
-bool Solver::checkGoal(vector<int> goal) {
+bool Solver::checkGoal(Goal goal) {
 
-    int block = goal[0];
-    int row = goal[1];
-    int col = goal[2];
+    int block = goal.block;
+    int row = goal.row;
+    int col = goal.col;
 
     return current_state->getGoalBlock(row,col) == block;
 }
@@ -41,7 +41,7 @@ bool Solver::searchVisitedStates(list<State*>& states, State* target) const {
 
 void Solver::getGoal() {
 
-    vector<int> goal;
+    Goal goal;
 	int block = 0;
 	int row,col;
     char input = 'y';
@@ -52,23 +52,20 @@ void Solver::getGoal() {
         cout << "\nBlock 1-6 : ";
         cin >> block;
     }
-    goal.push_back(block);
+    goal.block = block;
 
     cout << "Row 0-2 : ";
     cin >> row;
-    goal.push_back(row);
+    goal.row = row;
 
     cout << "Col 0-2 : ";
     cin >> col;
-    goal.push_back(col);
+    goal.col;
 
     goals.push(goal);
 
-    cout << "Goal: (";
-    for (int i = 0; i < BOARDSIZE; i++) {	
-        cout << goal[i];
-        if (i != BOARDSIZE -1) cout << ", "; else cout << ") \n\n";
-    }
+    cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ")\n\n";
+
 }
 
 void Solver::solve()  {
@@ -79,7 +76,7 @@ void Solver::solve()  {
     int steps = 0;
     int num_visits = 0;
    
-    vector<int> goal = goals.front();
+    Goal goal = goals.top();
 
     while(!checkGoal(goal) && steps < 100) {
         

@@ -17,7 +17,7 @@ void HeuristicSolver::solve()  {
         list<State*> visited;
         visited.push_back(current_state);
 
-        vector<int> goal = goals.front();
+        Goal goal = goals.top();
 
         while(!checkGoal(goal) && steps < 100) {
         
@@ -44,11 +44,7 @@ void HeuristicSolver::solve()  {
         }
 
         if (checkGoal(goal)) {
-            cout << "\nGOAL: (";
-            for (int i = 0; i < goal.size(); i++) {
-                cout << goal[i];
-                if (i != goal.size() -1) cout << ", "; else cout << ") ";
-            }
+            cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ") ";
             cout << "is found within " << steps << " steps." << endl;
             break;
         } else {
