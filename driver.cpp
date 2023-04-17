@@ -22,9 +22,14 @@ int main() {
 
 	srand(time(NULL));
 
+	// int BOARDSIZE = 0;
+	
+	// cout << "Enter the size of board: ";
+	// cin >> BOARDSIZE;
+
 	State* initial_state = new State();
-	// Solver solver(initial_state);
-	// solver.solve();
+	Solver solver(initial_state);
+	solver.solve();
 	
 	// HeuristicSolver h(initial_state);
 	// h.solve();
@@ -32,8 +37,8 @@ int main() {
 	// Disjunctive d(initial_state);
 	// d.solve();
 
-	Conjunctive c(initial_state);
-	c.solve();
+	// Conjunctive c(initial_state);
+	// c.solve();
 
 	delete initial_state;
 

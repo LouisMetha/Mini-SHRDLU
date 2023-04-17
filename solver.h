@@ -60,7 +60,7 @@ void Solver::getGoal() {
 
     cout << "Col 0-2 : ";
     cin >> col;
-    goal.col;
+    goal.col = col;
 
     goals.push(goal);
 
