@@ -7,7 +7,7 @@ class Goal {
         int col;
 
     bool operator<(const Goal g) const {
-        if(row < g.row)
+        if(row > g.row)
             return true;
         else
             return false;

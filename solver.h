@@ -5,11 +5,10 @@ class Solver {
 protected:
     State* current_state;
     priority_queue<Goal> goals;
-    int num_blocks = 6;
 
 public:
     Solver(State* initial_state) : current_state(initial_state) {
-        cout << "--- Initial State ---\n\n";
+        cout << "\n--- Initial State ---\n\n";
         current_state->printBoard();
 
     }
@@ -48,17 +47,17 @@ void Solver::getGoal() {
         
     cout << "Enter the goal (Block, row, col): ";
 
-    while (block <= 0 || block > num_blocks) {
-        cout << "\nBlock 1-6 : ";
+    while (block <= 0 || block > current_state->num_blocks) {
+        cout << "\nBlock 1-"<< current_state->num_blocks << " : ";
         cin >> block;
     }
     goal.block = block;
 
-    cout << "Row 0-2 : ";
+    cout << "Row 0-" << current_state->BOARDSIZE - 1 << " : ";
     cin >> row;
     goal.row = row;
 
-    cout << "Col 0-2 : ";
+    cout << "Col 0-" << current_state->BOARDSIZE - 1 << " : ";
     cin >> col;
     goal.col = col;
 

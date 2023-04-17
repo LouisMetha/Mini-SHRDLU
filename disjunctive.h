@@ -19,17 +19,17 @@ void Disjunctive::getGoal() {
         block = 0;
         cout << "Enter the goal (Block, row, col): ";
 
-        while (block <= 0 || block > num_blocks) {
-            cout << "\nBlock 1-6 : ";
+        while (block <= 0 || block > current_state->num_blocks) {
+            cout << "\nBlock 1-" << current_state->num_blocks << " : ";
             cin >> block;
         }
         goal.block = block;
 
-        cout << "Row 0-2 : ";
+        cout << "Row 0-" << current_state->BOARDSIZE -1 << " : ";
         cin >> row;
         goal.row = row;
 
-        cout << "Col 0-2 : ";
+        cout << "Col 0-" <<  current_state->BOARDSIZE -1 << " : ";
         cin >> col;
         goal.col = col;
 

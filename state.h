@@ -1,16 +1,46 @@
 #pragma once
 
-const int BOARDSIZE = 3;
-
 class State {
 private:
-	int grid[BOARDSIZE][BOARDSIZE] = {};
-	vector<int> numbers{ 0,0,0,1,2,3,4,5,6 };
+	vector<vector<int>> grid;
+	vector<int> numbers;
 	int passBlock;
 
+
 public:
- 
+
+	int num_blocks = 6;
+	int BOARDSIZE = 3;
+
 	State() {
+
+		grid.resize(BOARDSIZE, vector<int>(BOARDSIZE));
+        numbers.resize(BOARDSIZE * BOARDSIZE);
+		fill(numbers.begin(), numbers.end(), 0);
+		
+		for (int i = 1; i <= num_blocks; i++) {
+   			numbers[i] = i;
+		}
+		for (int i = 0; i < BOARDSIZE; i++) {
+			for (int j = 0; j < BOARDSIZE; j++) {
+				int temp = rand() % numbers.size();
+				grid[i][j] = numbers[temp];
+				numbers.erase(numbers.begin() + temp);
+			}
+		}
+		pushDown();
+	}
+ 
+	State(int size, int n) : BOARDSIZE(size),num_blocks(n) {
+		
+		grid.resize(size, vector<int>(size));
+        numbers.resize(size * size);
+		fill(numbers.begin(), numbers.end(), 0);
+		
+		for (int i = 1; i <= num_blocks; i++) {
+   			numbers[i] = i;
+		}
+
 		for (int i = 0; i < BOARDSIZE; i++) {
 			for (int j = 0; j < BOARDSIZE; j++) {
 				int temp = rand() % numbers.size();
@@ -59,15 +89,22 @@ void State::printBoard() {
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (grid[i][j] == 0) {
-				cout << "| " << " " << " ";
+				cout << "| " << " " << "  ";
 
 			} else {
-				cout << "| " << grid[i][j] << " ";
+				if (grid[i][j] < 10)
+					cout << "| " << grid[i][j] << "  ";
+				else
+					cout << "| " << grid[i][j] << " ";
+
 			}
 		}
 		cout << "|\n";
 	}
-	cout << " --- --- --- \n\n";
+
+	for (int i = 0; i < BOARDSIZE; i++)
+		cout << " ----";
+	cout << "\n\n";
 
 }
 

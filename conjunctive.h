@@ -37,10 +37,9 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
     prev_goals.push_back(goal);
     goals.pop();
 
-    while (steps < 100) {
+    while (steps < 10000) {
 
         priority_queue<Action> actions = current_state->heuristicActions(goal);
-        //add prev_goals as well into actions
         
         while (!actions.empty()) {
 
