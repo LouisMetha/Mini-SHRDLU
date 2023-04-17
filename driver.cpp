@@ -35,43 +35,38 @@ int main() {
 	cout << "7. Quit\n";
     cin >> choice;
 
+	State* initial_state;
+
 	switch (choice) {
 		case 1: {
-			State* initial_state = new State();
+			initial_state = new State();
 			Solver s(initial_state);
 			s.solve();
-			delete initial_state;
 			break;
 		}
 		case 2: {
-			State* initial_state = new State();
+			initial_state = new State();
 			HeuristicSolver h(initial_state);
 			h.solve();
-			delete initial_state;
 			break;
 		}
 		case 3: {
-			State* initial_state = new State();
+			initial_state = new State();
 			Disjunctive d(initial_state);
 			d.solve();
-			delete initial_state;
 			break;
 		}
 		case 4: {
-			State* initial_state = new State();
+			initial_state = new State();
 			Conjunctive c(initial_state);
 			c.solve();
-			delete initial_state;
-
 			break;
 		}
 		case 5: {
 			int size = getSize();
-			State* initial_state = new State(size,getBlocks(size));
+			initial_state = new State(size,getBlocks(size));
 			Conjunctive c(initial_state);
 			c.solve();
-			delete initial_state;
-
 			break;
 		}
 		case 7: {
@@ -81,6 +76,8 @@ int main() {
 			break;
 		}
 	}
+
+	delete initial_state;
 
 	return 0;
 }
