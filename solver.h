@@ -42,7 +42,8 @@ void Solver::getGoal() {
 
     Goal goal;
 	int block = 0;
-	int row,col;
+	int row = -1;
+    int col = -1;
     char input = 'y';
         
     cout << "Enter the goal (Block, row, col): ";
@@ -53,12 +54,18 @@ void Solver::getGoal() {
     }
     goal.block = block;
 
-    cout << "Row 0-" << current_state->BOARDSIZE - 1 << " : ";
-    cin >> row;
+    while (row < 0 || row > current_state->BOARDSIZE - 1) {
+        cout << "Row 0-" << current_state->BOARDSIZE - 1 << " : ";
+        cin >> row;
+    
+    }
     goal.row = row;
 
-    cout << "Col 0-" << current_state->BOARDSIZE - 1 << " : ";
-    cin >> col;
+    while (col < 0 || col > current_state->BOARDSIZE - 1) {
+        cout << "Col 0-" << current_state->BOARDSIZE - 1 << " : ";
+        cin >> col;
+    
+    }
     goal.col = col;
 
     goals.push(goal);

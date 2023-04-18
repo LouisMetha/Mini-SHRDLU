@@ -81,7 +81,6 @@ public:
 	int getHeuristicValue(int source, int destination, Goal goal);
 	priority_queue<Action> blindLegalActions();
 	priority_queue<Action> heuristicActions(Goal goal);
-
 };
 
 void State::printBoard() {
@@ -133,63 +132,32 @@ void State::pushDown() {
 
 int State::removeBlockFrom(int column) {
 
-	stack<int> tempStack;
-	int topBlock;
+	int topBlock = 0;
 
 	for (int i = 0; i < BOARDSIZE; i++) {
 		if (grid[i][column] != 0){
-			tempStack.push(grid[i][column]);
+			topBlock = grid[i][column];
+			grid[i][column] = 0;
+			break;
 		}
 	}
 
-	if (tempStack.size() == 0) {
+	if (topBlock == 0)
 		return 0;
-	}
-
-	for (int k = 0; k < BOARDSIZE; k++) {
-		if (tempStack.empty() == true) {
-			grid[BOARDSIZE - k - 1][column] = 0;
-
-		} else if (tempStack.size() == 1) {			// replace last element of stack with 0 then pop it
-			grid[BOARDSIZE - k - 1][column] = 0;
-			topBlock = tempStack.top();
-			tempStack.pop();
-			
-		} else {
-			grid[BOARDSIZE - k - 1][column] = tempStack.top();
-			tempStack.pop();
-		}
-	}
 
 	return topBlock;
 }
 
 bool State::insertBlockTo(int column, int value) {
 
-	stack<int> tempStack;
-	
-	tempStack.push(value);	
-
 	for (int i = 0; i < BOARDSIZE; i++) {
-		if (grid[i][column] != 0) {
-			tempStack.push(grid[i][column]);
+		if (grid[BOARDSIZE - i - 1][column] == 0) {
+			grid[BOARDSIZE - i - 1][column] = value;
+			return true;
 		}
 	}
 
-	if (tempStack.size() > BOARDSIZE) { // if size of 4 = cannot add a block on top
-		return false;
-	}
-
-	for (int k = 0; k < BOARDSIZE; k++) {
-		if (tempStack.empty() == true) {
-			grid[BOARDSIZE - k - 1][column] = 0;
-		} else {
-			grid[BOARDSIZE - k - 1][column] = tempStack.top();
-			tempStack.pop();
-		}
-	}
-
-	return true;
+	return false;
 }
 
 bool State::moveBlock(int source, int destination) {
@@ -303,7 +271,7 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 	if (curRow == (blocks - 1)) {
 		value += 50;
 	} else {
-		value += 15 - (blocks - curRow - 1)*5;
+		value += (blocks - curRow - 1)*15;
 	}
 	
 	//get value depends on blocks to move at goal position
@@ -316,11 +284,11 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 	}
 
 	if (blocks == row) {
-		value += 35;
+		value += 15;
 	} else if (blocks == row - 1) {
-		value += 25;
-	} else if (blocks > row){
-		value += 15 - (blocks - row)*5;
+		value += 10;
+	} else if (blocks < row){
+		value += 40 - (blocks - row)*10;
 	}
 
 	return value;

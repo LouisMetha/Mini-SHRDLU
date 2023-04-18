@@ -37,7 +37,7 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
     prev_goals.push_back(goal);
     goals.pop();
 
-    while (steps < 10000) {
+    while (steps < 5000) {
 
         priority_queue<Action> actions = current_state->heuristicActions(goal);
         
@@ -55,7 +55,8 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
                 if (num_visits == 50) { 
                     priority_queue<Action> temp_actions = current_state->blindLegalActions();
                     a = temp_actions.top();
-                    current_state->moveBlock(a.source,a.destination); 
+                    current_state->moveBlock(a.source,a.destination);
+
                     cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
                     current_state->printBoard();
                     num_visits = 0;
