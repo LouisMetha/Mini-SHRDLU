@@ -1,0 +1,14 @@
+1. For solve function,
+    - the solve function can iterator for the worst case of an n times of steps for each state move
+    - While the maximum number of actions is 6 for the board size of 3*3, we can consider m as number of legal actions.
+    - the inner loop (m) is a much smaller scale then the outer loop (n), the time complexicity of this function is O(n*m) = O(n)
+    - OR if the size of n and m are at similar scale, the time complexicity can be considered O(n^2)
+    
+2. For the solve function with multiple goals,
+    - If it has the maximum number of steps, it will have the same time complexicity of O(n) as the program ends after n steps.
+    - If it does not have maximun steps, the worst case would be O(m*n^p), where m is the maximum depth of the search tree, n is the number of possible actions at each state, and p is the number of goals to be checked.
+
+3. The use of the priority queue and the list to keep track of visited states could affect the performance of the algorithm, but these data structures generally have good time complexities for their operations.
+        For example:
+            - priority queue has a O(1) when calling the top element and O(log n ) for popping and pushing an element into the priority queue
+            - list is used for visited states, the operation for comparing the target state to the states in the list is O(n). All standard operations for list STL has O(1) e.g. push back, push front, pop, insert etc.

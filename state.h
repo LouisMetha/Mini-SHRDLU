@@ -70,6 +70,17 @@ public:
 	int getBlock() {
 		return passBlock;
 	}
+	int heuristic(Goal goal) {
+        int h = 0;
+        for(int i=0; i < BOARDSIZE; i++) {
+            for(int j=0; j < BOARDSIZE; j++) {
+                if(grid[i][j] == goal.block) {
+                    h += abs(i-goal.row) + abs(j-goal.col);
+                }
+            }
+        }
+        return h;
+    }
 
 	void printBoard();
 	void pushDown();
@@ -79,8 +90,8 @@ public:
 	bool checkMove(int source, int destination);
 	int getGoalBlock(int row, int col);
 	int getHeuristicValue(int source, int destination, Goal goal);
-	priority_queue<Action> blindLegalActions();
-	priority_queue<Action> heuristicActions(Goal goal);
+	priority_queue<Action> legalActions();
+	priority_queue<Action> legalActions(Goal goal);
 };
 
 void State::printBoard() {
@@ -197,7 +208,7 @@ int State::getGoalBlock(int row, int col) {
 	return block;
 }
 
-priority_queue<Action> State::blindLegalActions() {
+priority_queue<Action> State::legalActions() {
 
 	priority_queue<Action> actions;
 	Action action;
@@ -215,7 +226,7 @@ priority_queue<Action> State::blindLegalActions() {
 	return actions;
 }
 
-priority_queue<Action> State::heuristicActions(Goal goal) {
+priority_queue<Action> State::legalActions(Goal goal) {
 
 	priority_queue<Action> actions;
 	Action action;
@@ -230,30 +241,26 @@ priority_queue<Action> State::heuristicActions(Goal goal) {
 		}
 	}
 
-
 	return actions;
 }
 
 int State::getHeuristicValue(int source, int destination, Goal goal) {
 
-	int goalblock = goal.block;
-    int row = goal.row;
-    int col = goal.col;
-	int value = 0;
 	int blocks = 0;
 	int curCol, curRow;
+	int value = 100;
 
 	State newState(*this); // does not use the same memory location as the original State
 	newState.moveBlock(source, destination);
 
-	if (newState.grid[BOARDSIZE - row - 1][col] == goalblock) {
-		return value += 100;
+	if (newState.grid[BOARDSIZE - goal.row - 1][goal.col] == goal.block) {
+		return value;
 	}
 
 	//find currenet position of goal block
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
-			if (newState.grid[BOARDSIZE - i - 1][j] == goalblock) {
+			if (newState.grid[BOARDSIZE - i - 1][j] == goal.block) {
 				curRow = i;
 				curCol = j;
 				break;
@@ -269,28 +276,24 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 	}
 
 	if (curRow == (blocks - 1)) {
-		value += 50;
-	} else {
-		value += (blocks - curRow - 1)*15;
+		value -= 50;
+		value += (curRow)*1;
+	} else if (blocks > curRow ) {
+		value -= 50 + 15 * (blocks - curRow);
 	}
 	
 	//get value depends on blocks to move at goal position
 	blocks = 0;
 
 	for (int n = 0; n < BOARDSIZE; n++) {
-		if (newState.grid[BOARDSIZE - n - 1][col] != 0) {
+		if (newState.grid[BOARDSIZE - n - 1][goal.col] != 0) {
 			blocks++;
 		}
 	}
 
-	if (blocks == row) {
-		value += 15;
-	} else if (blocks == row - 1) {
-		value += 10;
-	} else if (blocks < row){
-		value += 40 - (blocks - row)*10;
+	if (blocks > goal.row) {
+		value -= (blocks - goal.row) * 9; 
 	}
 
 	return value;
-
 }

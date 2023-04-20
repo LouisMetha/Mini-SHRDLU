@@ -35,11 +35,10 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
     int num_visits = 0;
     Goal goal = goals.top();
     prev_goals.push_back(goal);
-    goals.pop();
 
     while (steps < 5000) {
 
-        priority_queue<Action> actions = current_state->heuristicActions(goal);
+        priority_queue<Action> actions = current_state->legalActions(goal);
         
         while (!actions.empty()) {
 
@@ -53,17 +52,16 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
                 
                 // prevent inf-loop - brute force move
                 if (num_visits == 50) { 
-                    priority_queue<Action> temp_actions = current_state->blindLegalActions();
+                    priority_queue<Action> temp_actions = current_state->legalActions();
                     a = temp_actions.top();
                     current_state->moveBlock(a.source,a.destination);
-
-                    cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
+                    cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << " with Heuristic: " << a.heuristic << endl; 
                     current_state->printBoard();
                     num_visits = 0;
                 }
                 continue;
             } else {
-                cout << "Step " << ++steps << " : Move " << next_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
+                cout << "Step " << ++steps << " : Move " << next_state->getBlock() << " from " << a.source << " to " << a.destination << " with Heuristic: " << a.heuristic << endl; 
                 visited.push_back(next_state);
                 current_state = next_state;
                 current_state->printBoard();
@@ -82,17 +80,12 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
 
         // check if all pervious checked goals are in correct position, if true >> call checkMultiGoals() again.
         if (matched_goals == prev_goals.size()) {
-            
+            goals.pop();
             cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ") ";
-            cout << "is found within " << steps << " steps." << endl;
+            cout << "is found within " << steps << " steps.\n" << endl;
 
             if (checkMultiGoals(goals, visited, steps)) {
                 return true;
-            } else {
-                steps--;
-                visited.pop_back();
-                prev_goals.pop_back();
-                current_state = visited.back();
             }
         }
     }

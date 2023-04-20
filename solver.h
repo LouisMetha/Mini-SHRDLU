@@ -86,7 +86,7 @@ void Solver::solve()  {
 
     while(!checkGoal(goal) && steps < 100) {
         
-        priority_queue<Action> actions = current_state->blindLegalActions();
+        priority_queue<Action> actions = current_state->legalActions();
 
         while(!actions.empty()) {
 
@@ -121,4 +121,5 @@ void Solver::solve()  {
     } else {
         cout << "Goal state is NOT found within " << steps << " steps." << endl;
     }
+
 }

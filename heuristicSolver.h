@@ -21,7 +21,7 @@ void HeuristicSolver::solve()  {
 
         while(!checkGoal(goal) && steps < 100) {
         
-            priority_queue<Action> actions = current_state->heuristicActions(goal);
+            priority_queue<Action> actions = current_state->legalActions(goal);
 
             while(!actions.empty()) {
 
@@ -34,7 +34,7 @@ void HeuristicSolver::solve()  {
                     continue;
                 } else {
                     cout << "Step " << ++steps << " : Move " << next_state->getBlock() 
-                    << " from " << a.source << " to " << a.destination << endl; 
+                    << " from " << a.source << " to " << a.destination << " with Heuristic: " << a.heuristic << endl; 
                     visited.push_back(next_state);
                     current_state = next_state;
                     current_state->printBoard();
