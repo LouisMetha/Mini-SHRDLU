@@ -9,7 +9,6 @@
 #include <string.h>
 #include <unordered_map>
 
-
 using namespace std;
 
 #include "goal.h"
@@ -19,7 +18,6 @@ using namespace std;
 #include "heuristicSolver.h"
 #include "disjunctive.h"
 #include "conjunctive.h"
-#include "a-star.h"
 
 int getSize();
 int getBlocks(int size);
@@ -35,8 +33,6 @@ int main() {
     cout << "3. Disjunctive goal solver\n";
     cout << "4. Conjunctive goal solver\n";
     cout << "5. Conjunctive goal solver on size*size board\n";
-    cout << "6. A* Star\n";
-	
 	cout << "7. Quit\n";
     cin >> choice;
 
@@ -74,12 +70,7 @@ int main() {
 			c.solve();
 			break;
 		}
-		case 6: {
-			initial_state = new State();
-			A_Star a(initial_state);
-			a.solve();
-			break;
-		}
+
 		case 7: {
 			break;
 		}

@@ -6,7 +6,6 @@ private:
 	vector<int> numbers;
 	int passBlock;
 
-
 public:
 
 	int num_blocks = 6;
@@ -70,17 +69,6 @@ public:
 	int getBlock() {
 		return passBlock;
 	}
-	int heuristic(Goal goal) {
-        int h = 0;
-        for(int i=0; i < BOARDSIZE; i++) {
-            for(int j=0; j < BOARDSIZE; j++) {
-                if(grid[i][j] == goal.block) {
-                    h += abs(i-goal.row) + abs(j-goal.col);
-                }
-            }
-        }
-        return h;
-    }
 
 	void printBoard();
 	void pushDown();
@@ -115,7 +103,6 @@ void State::printBoard() {
 	for (int i = 0; i < BOARDSIZE; i++)
 		cout << " ----";
 	cout << "\n\n";
-
 }
 
 void State::pushDown() {
@@ -123,7 +110,6 @@ void State::pushDown() {
 	stack<int> tempStack;
 
 	for (int i = 0; i < BOARDSIZE; i++) {
-
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (grid[j][i] != 0){
 				tempStack.push(grid[j][i]);
@@ -212,6 +198,7 @@ priority_queue<Action> State::legalActions() {
 
 	priority_queue<Action> actions;
 	Action action;
+
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (checkMove( i,j)) {
@@ -230,6 +217,7 @@ priority_queue<Action> State::legalActions(Goal goal) {
 
 	priority_queue<Action> actions;
 	Action action;
+	
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (checkMove( i,j)) {
@@ -268,7 +256,6 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 		}
 	}
 
-	//get value if on top of blocks
 	for (int k = 0; k < BOARDSIZE; k++) {
 		if (newState.grid[BOARDSIZE - k - 1][curCol] != 0) {
 			blocks++;
@@ -282,9 +269,7 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 		value -= 50 + 15 * (blocks - curRow);
 	}
 	
-	//get value depends on blocks to move at goal position
 	blocks = 0;
-
 	for (int n = 0; n < BOARDSIZE; n++) {
 		if (newState.grid[BOARDSIZE - n - 1][goal.col] != 0) {
 			blocks++;

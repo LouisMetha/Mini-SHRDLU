@@ -10,7 +10,6 @@ public:
     Disjunctive(State* initial_state) : HeuristicSolver(initial_state) {}
     void getGoal() override;
     void checkExtraGoal();
-    
 };
 
 void Disjunctive::getGoal() {
@@ -28,7 +27,7 @@ void Disjunctive::getGoal() {
         cout << "Enter the goal (Block, row, col): ";
 
         while (block <= 0 || block > current_state->num_blocks || (find(tempBlock.begin(), tempBlock.end(), block) != tempBlock.end())) {
-            cout << "Invalid block - not in range or already selected!\n";
+            if (block != 0) cout << "Invalid block - not in range or already selected!\n";
             cout << "\nBlock 1-"<< current_state->num_blocks << " : ";
             cin >> block;
         }
@@ -41,7 +40,6 @@ void Disjunctive::getGoal() {
         
         }
         goal.row = row;
-        
 
         while (col < 0 || col > current_state->BOARDSIZE - 1) {
             cout << "Col 0-" << current_state->BOARDSIZE - 1 << " : ";
@@ -54,11 +52,8 @@ void Disjunctive::getGoal() {
             goalRecords[col] = row;
         }
 
-
         goals.push(goal);
-
         cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ")" << " added.\n\n";
-
         cout << "Do you want to enter more goals? (y/n): ";
         cin >> input;
 
@@ -72,7 +67,7 @@ void Disjunctive::checkExtraGoal() {
 
     Goal goal;
 
-    for (int i = 0; i < current_state->BOARDSIZE; i++)
+    for (int i = 0; i < current_state->BOARDSIZE; i++) {
         if (goalRecords.count(i) > 0) {
             for (int j = 0; j < goalRecords[i]; j++) {
 
@@ -90,4 +85,5 @@ void Disjunctive::checkExtraGoal() {
                 cout << "Added extra goal. " << goal.block << " " << goal.row << " " << goal.col << endl;
             }
         }
+    }
 }

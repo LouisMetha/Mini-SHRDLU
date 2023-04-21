@@ -57,7 +57,6 @@ void Solver::getGoal() {
     while (row < 0 || row > current_state->BOARDSIZE - 1) {
         cout << "Row 0-" << current_state->BOARDSIZE - 1 << " : ";
         cin >> row;
-    
     }
     goal.row = row;
 
@@ -66,12 +65,10 @@ void Solver::getGoal() {
         cin >> col;
     
     }
+
     goal.col = col;
-
     goals.push(goal);
-
     cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ")\n\n";
-
 }
 
 void Solver::solve()  {
@@ -98,7 +95,6 @@ void Solver::solve()  {
                 actions.pop();
                 num_visits++;
                 
-                // prevent inf-loop - brute force move
                 if (num_visits == 50) { 
                     current_state->moveBlock(a.source,a.destination); 
                     cout << "Step " << ++steps << " : Move " << current_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
@@ -106,6 +102,7 @@ void Solver::solve()  {
                     num_visits = 0;
                 }
                 continue;
+
             } else {
                 cout << "Step " << ++steps << " : Move " << next_state->getBlock() << " from " << a.source << " to " << a.destination << endl; 
                 visited.push_back(next_state);
@@ -121,5 +118,4 @@ void Solver::solve()  {
     } else {
         cout << "Goal state is NOT found within " << steps << " steps." << endl;
     }
-
 }
