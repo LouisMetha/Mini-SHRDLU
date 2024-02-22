@@ -1,15 +1,24 @@
 #pragma once
 
 class State {
-private:
-	vector<vector<int>> grid;
-	vector<int> numbers;
-	int passBlock;
 
 public:
-
 	int num_blocks = 6;
 	int BOARDSIZE = 3;
+	void printBoard();
+	void pushDown();
+	int removeBlockFrom(int column);
+	bool insertBlockTo(int column, int value);
+	bool moveBlock(int source, int destination);
+	bool checkMove(int source, int destination);
+	int getGoalBlock(int row, int col);
+	int getHeuristicValue(int source, int destination, Goal goal);
+	priority_queue<Action> legalActions();
+	priority_queue<Action> legalActions(Goal goal);
+
+	int getBlock() {
+		return passBlock;
+	}
 
 	State() {
 
@@ -66,20 +75,10 @@ public:
 		return false;
 	}
 
-	int getBlock() {
-		return passBlock;
-	}
-
-	void printBoard();
-	void pushDown();
-	int removeBlockFrom(int column);
-	bool insertBlockTo(int column, int value);
-	bool moveBlock(int source, int destination);
-	bool checkMove(int source, int destination);
-	int getGoalBlock(int row, int col);
-	int getHeuristicValue(int source, int destination, Goal goal);
-	priority_queue<Action> legalActions();
-	priority_queue<Action> legalActions(Goal goal);
+private:
+	vector<vector<int>> grid;
+	vector<int> numbers;
+	int passBlock;
 };
 
 void State::printBoard() {
@@ -153,7 +152,7 @@ bool State::insertBlockTo(int column, int value) {
 			return true;
 		}
 	}
-
+	
 	return false;
 }
 
@@ -220,7 +219,7 @@ priority_queue<Action> State::legalActions(Goal goal) {
 	
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
-			if (checkMove( i,j)) {
+			if (checkMove(i,j)) {
 				action.source = i;
 				action.destination = j;
 				action.heuristic = getHeuristicValue(i,j,goal);
@@ -238,14 +237,13 @@ int State::getHeuristicValue(int source, int destination, Goal goal) {
 	int curCol, curRow;
 	int value = 100;
 
-	State newState(*this); // does not use the same memory location as the original State
+	State newState(*this);
 	newState.moveBlock(source, destination);
 
 	if (newState.grid[BOARDSIZE - goal.row - 1][goal.col] == goal.block) {
 		return value;
 	}
 
-	//find currenet position of goal block
 	for (int i = 0; i < BOARDSIZE; i++) {
 		for (int j = 0; j < BOARDSIZE; j++) {
 			if (newState.grid[BOARDSIZE - i - 1][j] == goal.block) {

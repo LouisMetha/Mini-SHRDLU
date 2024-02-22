@@ -17,23 +17,16 @@ void Conjunctive::solve() {
 
     if (checkMultiGoals(goals, visited, steps)) {
         cout << "\nAll goals are found within " << steps << " steps.\n\n";
-    } else {
-        cout << "\nNot all goals are found within " << steps << " steps.\n\n";
     }
 }
 
 bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& visited, int& steps) {
 
-    if (goals.empty()) {
-        return true;
-    }
-
-    int matched_goals = 0;
     int num_visits = 0;
-    Goal goal = goals.top();
 
     while (!goals.empty()) {
 
+        Goal goal = goals.top();
         priority_queue<Action> actions = current_state->legalActions(goal);
         
         while (!actions.empty()) {
@@ -46,7 +39,7 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
                 actions.pop();
                 num_visits++;
                 
-                // prevent inf-loop - brute force move
+                // prevent inf-loop - force a move
                 if (num_visits == 50) { 
                     priority_queue<Action> temp_actions = current_state->legalActions();
                     a = temp_actions.top();
@@ -69,10 +62,8 @@ bool Conjunctive::checkMultiGoals(priority_queue<Goal>& goals, list<State*>& vis
             goals.pop();
             cout << "Goal: (" << goal.block << ", "<< goal.row << ", "<< goal.col << ") ";
             cout << "is found within " << steps << " steps.\n" << endl;
-            
-            return checkMultiGoals(goals, visited, steps);
         }
     }
 
-    return false;
+    return true;
 }
